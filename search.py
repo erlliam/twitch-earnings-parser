@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import urllib.request
+from urllib.parse import quote
 import argparse
 import json
 import math
@@ -25,7 +26,7 @@ def print_error(message):
 
 def get_user_id(username):
     # client ID comes from: https://www.streamweasels.com/support/convert-twitch-username-to-user-id/
-    twitch_url = f"https://api.twitch.tv/kraken/users?login={username}"
+    twitch_url = f"https://api.twitch.tv/kraken/users?login={quote(username)}"
     headers = {
         "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0",
         "Accept": "application/vnd.twitchtv.v5+json",
