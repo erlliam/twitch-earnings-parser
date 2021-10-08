@@ -1,12 +1,17 @@
+#!/usr/bin/env python3
+
 import urllib.request
+import argparse
 import json
 from datetime import datetime
-import sys
 import subprocess
 
 
 def main():
-  username = sys.argv[1]
+  parser = argparse.ArgumentParser()
+  parser.add_argument("username", help="Twitch username")
+  args = parser.parse_args()
+  username = args.username
   user_id = get_user_id(username)
   print_monthly_revenue(user_id)
 
