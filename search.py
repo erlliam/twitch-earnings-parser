@@ -26,7 +26,13 @@ def get_user_id(username):
   }
   request = urllib.request.Request(url=twitch_url, headers=headers)
   with urllib.request.urlopen(request) as response:
+    if response.status != 200:
+      raise Exception('The Twitch API request failed.')
+
     data = json.loads(response.read())
+    if (data['_total'] == 0):
+      raise Exception('The username provided is not found.')
+
     return data['users'][0]['_id']
 
 
