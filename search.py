@@ -47,20 +47,8 @@ def get_user_id(username):
 
 
 def print_monthly_revenue(user_id):
-    revenues = None
-
-    run_result = subprocess.run(
-        ["rg", "-IN", "--color=never", user_id, "all_revenues"],
-        encoding="UTF-8",
-        capture_output=True,
-    )
-    if run_result.returncode == 0:
-        revenues = run_result.stdout
-    else:
-        print_error("no revenue was found for the user")
-
     dates_and_money = []
-    rows = revenues.splitlines()
+    rows = get_rows(user_id)
     for row in rows:
         date = row.split(",")[11]
         revenues = get_revenues_from_row(row)
@@ -81,6 +69,20 @@ def print_monthly_revenue(user_id):
             continue
         print(x["date"], math.floor(x["money"]))
         printed.add(x["date"])
+
+
+def get_rows(user_id):
+    run_result = subprocess.run(
+        ["rg", "-IN", "--color=never", user_id, "all_revenues"],
+        encoding="UTF-8",
+        capture_output=True,
+    )
+    if run_result.returncode == 0:
+        revenues = run_result.stdout
+    else:
+        print_error("no revenue was found for the user")
+
+    return revenues.splitlines()
 
 
 def get_revenues_from_row(row):
