@@ -4,6 +4,7 @@ import urllib.request
 import argparse
 import json
 import math
+import sys
 from datetime import datetime
 import subprocess
 
@@ -17,6 +18,11 @@ def main():
     print_monthly_revenue(user_id)
 
 
+def print_error(message):
+    print(f"error: {message}", file=sys.stderr)
+    exit(1)
+
+
 def get_user_id(username):
     # client ID is stolen from: https://www.streamweasels.com/support/convert-twitch-username-to-user-id/
     twitch_url = f"https://api.twitch.tv/kraken/users?login={username}"
@@ -28,11 +34,11 @@ def get_user_id(username):
     request = urllib.request.Request(url=twitch_url, headers=headers)
     with urllib.request.urlopen(request) as response:
         if response.status != 200:
-            raise Exception("The Twitch API request failed.")
+            print_error("the Twitch API request failed")
 
         data = json.loads(response.read())
         if data["_total"] == 0:
-            raise Exception("The username provided is not found.")
+            print_error("the user provided was not found or the user is currently banned")
 
         return data["users"][0]["_id"]
 
@@ -48,9 +54,7 @@ def print_monthly_revenue(user_id):
     if run_result.returncode == 0:
         revenues = run_result.stdout
     else:
-        raise Exception(
-            "The user's revenue was not found in the data. This can also happen if the user was banned."
-        )
+        print_error("no revenue was found for the user")
 
     dates_and_money = []
     rows = revenues.splitlines()
