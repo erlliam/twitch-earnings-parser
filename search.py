@@ -38,17 +38,19 @@ def get_user_id(username):
 
 
 def print_monthly_revenue(user_id):
-    try:
-        revenues = subprocess.check_output(
-            ["rg", "-IN", "--color=never", user_id, "all_revenues"], encoding="UTF-8"
-        )
-    except subprocess.CalledProcessError as error:
-        if error.returncode == 1:
-            raise Exception(
-                "The user's revenue was not found in the data. This can happen if the user is banned."
-            )
+    revenues = None
 
-        raise error
+    run_result = subprocess.run(
+        ["rg", "-IN", "--color=never", user_id, "all_revenues"],
+        encoding="UTF-8",
+        capture_output=True,
+    )
+    if run_result.returncode == 0:
+        revenues = run_result.stdout
+    else:
+        raise Exception(
+            "The user's revenue was not found in the data. This can also happen if the user was banned."
+        )
 
     dates_and_money = []
     rows = revenues.splitlines()
