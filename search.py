@@ -24,7 +24,7 @@ def print_error(message):
 
 
 def get_user_id(username):
-    # client ID is stolen from: https://www.streamweasels.com/support/convert-twitch-username-to-user-id/
+    # client ID comes from: https://www.streamweasels.com/support/convert-twitch-username-to-user-id/
     twitch_url = f"https://api.twitch.tv/kraken/users?login={username}"
     headers = {
         "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0",
@@ -38,7 +38,9 @@ def get_user_id(username):
 
         data = json.loads(response.read())
         if data["_total"] == 0:
-            print_error("the user provided was not found or the user is currently banned")
+            print_error(
+                "the user provided was not found or the user is currently banned"
+            )
 
         return data["users"][0]["_id"]
 
