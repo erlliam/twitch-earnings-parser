@@ -46,7 +46,11 @@ def print_monthly_revenue(user_id):
       'money': revenues_sum
     })
 
-  sort_by_date = sorted(date_and_money, key=lambda x: datetime.timestamp(datetime.strptime(x['date'], '%m/%d/%Y')))
+  def sort_key(x):
+    date = datetime.strptime(x['date'], '%m/%d/%Y')
+    timestamp = datetime.timestamp(date)
+    return timestamp
+  sort_by_date = sorted(date_and_money, key=sort_key)
 
   for x in sort_by_date:
     print(x['date'], x['money']);
