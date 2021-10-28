@@ -1,4 +1,7 @@
 # twitch-earnings-parser
+
+You must find the data yourself.
+
 ## Usage
 
     $ ./search.py username

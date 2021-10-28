@@ -81,7 +81,7 @@ def get_rows(user_id):
     if run_result.returncode == 0:
         revenues = run_result.stdout
     else:
-        print_error("no revenue was found for the user")
+        print_error("no revenue was found for the user (are the csv files missing?)")
 
     return revenues.splitlines()
 
