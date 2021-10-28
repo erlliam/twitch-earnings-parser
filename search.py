@@ -50,8 +50,9 @@ def print_monthly_revenue(user_id):
     dates_and_money = []
     rows = get_rows(user_id)
     for row in rows:
-        date = row.split(",")[11]
-        revenues = get_revenues_from_row(row)
+        columns = row.split(",")
+        date = columns[11]
+        revenues = get_revenues_from_columns(columns)
         revenues_float = list(map(float, revenues))
         revenues_sum = sum(revenues_float)
         dates_and_money.append({"date": date, "money": revenues_sum})
@@ -85,8 +86,7 @@ def get_rows(user_id):
     return revenues.splitlines()
 
 
-def get_revenues_from_row(row):
-    columns = row.split(",")
+def get_revenues_from_columns(columns):
     if len(columns) == 13:
         a = columns[2:-2]
         a.append(columns[-1])
